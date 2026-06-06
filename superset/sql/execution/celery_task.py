@@ -323,7 +323,11 @@ def _serialize_result_set(
     return (data, result_set.columns)
 
 
-@celery_app.task(name="query_execution.execute_sql")
+@celery_app.task(
+    name="query_execution.execute_sql",
+    time_limit=21660,  # SQLLAB_ASYNC_TIME_LIMIT_SEC (6h) + 60s grace
+    soft_time_limit=21600,  # SQLLAB_ASYNC_TIME_LIMIT_SEC (6h)
+)
 def execute_sql_task(
     query_id: int,
     rendered_query: str,
