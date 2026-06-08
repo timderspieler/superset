@@ -3011,8 +3011,8 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
                     and parse_result.script.has_unparseable_statement
                 ):
                     logger.warning(
-                        "Access denied: user=%s resource=sql "
-                        "reason=unparseable_sql_statement",
+                        "Access denied: user=%s resource=sql"
+                        " reason=unparseable_statement",
                         get_user_id(),
                     )
                     raise SupersetSecurityException(
@@ -3100,8 +3100,8 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
 
             if denied:
                 logger.warning(
-                    "Access denied: user=%s "
-                    "resource=table:%s reason=table_access_denied",
+                    "Access denied: user=%s"
+                    " resource=table:%s reason=table_access_denied",
                     get_user_id(),
                     denied,
                 )
@@ -3117,9 +3117,9 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
             and query_context_modified(query_context)
         ):
             logger.warning(
-                "Access denied: user=%s "
-                "resource=query_context "
-                "reason=guest_user_modified_chart_payload",
+                "Access denied: user=%s"
+                " resource=query_context"
+                " reason=guest_modified_chart_payload",
                 get_user_id(),
             )
             raise SupersetSecurityException(
@@ -3233,11 +3233,11 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
                 )
             ):
                 logger.warning(
-                    "Access denied: user=%s "
-                    "resource=datasource:%s "
-                    "reason=datasource_access_denied",
+                    "Access denied: user=%s"
+                    " resource=datasource:%s"
+                    " reason=datasource_access_denied",
                     get_user_id(),
-                    datasource,
+                    datasource.id,
                 )
                 raise SupersetSecurityException(
                     self.get_datasource_access_error_object(datasource)
@@ -3257,11 +3257,11 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
                     or datasource.id not in allowed_datasets
                 ):
                     logger.warning(
-                        "Access denied: user=%s "
-                        "resource=datasource:%s "
-                        "reason=guest_token_dataset_not_allowed",
+                        "Access denied: user=%s"
+                        " resource=datasource:%s"
+                        " reason=guest_token_not_allowed",
                         get_user_id(),
-                        datasource,
+                        datasource.id,
                     )
                     raise SupersetSecurityException(
                         self.get_datasource_access_error_object(datasource)
@@ -3274,9 +3274,9 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
                 if self.has_guest_access(dashboard):
                     return
                 logger.warning(
-                    "Access denied: user=%s "
-                    "resource=dashboard:%s "
-                    "reason=guest_dashboard_access_denied",
+                    "Access denied: user=%s"
+                    " resource=dashboard:%s"
+                    " reason=guest_dashboard_denied",
                     get_user_id(),
                     dashboard.id,
                 )
@@ -3313,9 +3313,9 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
                 return
 
             logger.warning(
-                "Access denied: user=%s "
-                "resource=dashboard:%s "
-                "reason=dashboard_access_denied",
+                "Access denied: user=%s"
+                " resource=dashboard:%s"
+                " reason=dashboard_access_denied",
                 get_user_id(),
                 dashboard.id,
             )
@@ -3840,8 +3840,7 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
         # misleading "ownership" error; raise the real cause instead.
         if orig_resource is None:
             logger.warning(
-                "Access denied: user=%s resource=%s:%s "
-                "reason=resource_removed_before_ownership_check",
+                "Access denied: user=%s resource=%s:%s reason=resource_removed",
                 get_user_id(),
                 type(resource).__name__,
                 resource.id,
